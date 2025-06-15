@@ -1,0 +1,15 @@
+<head>
+	<title>Tester le query string</title>
+	<description>Oula, mais c'est technique tout ça !</description>
+</head>
+<page>
+	<source fichier="nav.html"/>
+	<h1>Tester le <i>query string</i></h1>
+	<ul>
+		<li><a href="/querystring?toto=zéro&zaza=0">/querystring?toto=zéro&zaza=0</a></li>
+		<li><a href="/querystring?toto=gnégné&zaza=99">/querystring?toto=gnégné&zaza=99</a></li>
+	</ul>
+	<p>Paramètre Toto : <span id="valeurToto"></span></p>
+	<p>Paramètre Zaza : <span id="valeurZaza"></span></p>
+	<script type="module" src="/js/querystring.js"></script>
+</page>

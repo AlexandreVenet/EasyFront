@@ -1,0 +1,1 @@
+Le dossier contenant ce fichier regroupe des fichiers qui doivent être téléchargés (et non pas lus dans le navigateur).
