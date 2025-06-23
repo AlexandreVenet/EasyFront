@@ -3,13 +3,18 @@
 But 
 - Serveur web en Node.js
 - Fournir des pages HTML composées dynamiquement (modèle, pages de contenu, imbrication d'éléments HTML distribués en fichiers) de façon à favoriser le SEO et faciliter l'édition
-- Expérience de navigation orientée *front-end* : page spécifique affichée directement (le serveur renvoie du HTML et des ressources) ***puis*** gestion en AJAX avec transitions entre écrans
+- Expérience de navigation orientée *front-end* : page spécifique affichée directement (le serveur renvoie du HTML et des ressources) ***puis*** gestion en AJAX avec transitions entre écrans et contrôle de l'historique client
+- Gestion d'un `sitemap.xml` général
+
+## Généralités
+
+Le préfixe `_` est utilisé pour les ressources du serveur ou pour des outils. Par exemple, la page d'erreur est préfixée de cette façon pour signifier que ce n'est pas une page à laquelle l'utilisateur peut accéder (la route correspondante est exclue).
 
 ## Fichiers en téléchargement
 
 Des fichiers sont soit à télécharger soit à consulter en ligne. L'attribut `download` des `<a>` ne doit pas être utilisé. En effet, avec cet attribut, le navigateur force le téléchargement même si le serveur lui envoie la page d'erreur ! 😄
 
-## Modèle
+## Modèle et pages
 
 Utilisation d'un modèle HTML posant une structure unique pour toutes les pages HTML du site. Les léments suivants sont modifiables : `base`, `title`, `description`, `body`. Le `head` peut accueillir des balises supplémentaires grâce à une balise personnalisée `customTags` (si rien à ajouter, l'omettre).
 
@@ -56,7 +61,7 @@ Pourquoi `class="customTag"` ? Ce n'est pas utile pour ce qui nous occupe ici. C
 
 ## Sous-éléments
 
-La page HTML est construite dynamiquement. Elle peut appeler des fichiers contenant des éléments HTML à insérer. Avec le modèle principal, on obtient donc de ce schéma d'imbrication :
+Une page HTML est construite dynamiquement. Elle peut appeler des fichiers contenant des éléments HTML à insérer. Avec le modèle principal, on obtient donc de ce schéma d'imbrication :
 
 ```
 Modèle > Page > Contenus imbriquables
@@ -166,3 +171,49 @@ Maintenant, les cas suivants se présentent.
 Dans tous les cas, `app.js` cherche les scripts qui possèdent un `export default` et les exécute. 
 
 Concernant l'ordre de chargement des scripts, les balises `<script>` dans les pages précèdent toujours celles du modèle HTML, ce qui définit l'ordre des requêtes de chargement. S'il faut utiliser d'autres scripts dans le modèle, alors veiller à placer l'appel d'`app.js` en dernière position.
+
+## Répertoire outils
+
+La route `/_easyfront` est destinée à accueillir des pages d'outils. Les ressources *front* utilisées par ces pages se trouvent dans `/front/_easyfront`. Les scripts *back* se trouvent au chemin `/back/_easyfront`.
+
+Ces pages n'utilisent pas le modèle du site et sont autonomes.
+
+Lorsque le serveur n'est pas *localhost*, `index.js` exclut l'accès aux ressources *back* ou *front* qui commençent par `/_easyfront`.
+
+Par souci de sécurité, on peut supprimer les dossiers commençant par `/_easyfront` et les lignes de code correspondantes dans `index.js`.
+
+## Sitemap.xml
+
+En *localhost*, la route `/_easyfront/sitemap-editor` achemine à un éditeur de `sitemap.xml`. Ce fichier XML est généré à la racine du projet. 
+
+Si le fichier n'existe pas, alors il est généré automatiquement. Lors de cette génération automatique, les données sont construites à partir de la valeur `DISTANT_HOST` dans `.env` et des chemins de fichiers ou dossiers. Les fichiers ou dossiers préfixés `_` sont exclus.
+
+**Menu principal**
+
+|Menu|Description|
+|-|-|
+|**Ajouter**|Ajouter un bloc de données (`<url>`).|
+|**Plier**|Fermer tous les blocs pour le confort de lecture.|
+|**Déplier**|Ouvrir tous les blocs pour consulter les contenus.|
+|**Enregistrer**|Sauvegarder les données dans le `sitemap.xml`.|
+|**Fichier**|Consulter dans un nouvel onglet le `sitemap.xml` actuellement sauvegardé.|
+|**Aide**|Lance [la page du protocole sitemap](https://www.sitemaps.org/protocol.html) dans un nouvel onglet.|
+
+**Bloc : données**
+
+|Entrée|Description|
+|-|-|
+|**Titre**|Nommer l'entrée pour le confort de lecture (non pris en charge pour l'indexation).|
+|**Loc**|L'adresse web (`<loc>`). Le serveur encodera les caractères spéciaux, les espaces...|
+|**LastMod**|Date de la dernière modification (`<lastmod>`).|
+|**ChangeFreq**|La fréquence de consultation (`<changefreq>`).|
+|**Priority**|Un nombre pouvant être à trois décimales et compris entre 0 et 1 représentant la priorité de l'URL par rapport aux autres du site (`<priority>`).|
+
+**Bloc : actions**
+
+|Action|Description|
+|-|-|
+|**Monter**|Déplacer le bloc vers le haut.|
+|**Descendre**|Déplacer le bloc vers le bas.|
+|**Plier/Déplier**|Ouvrir ou fermer le bloc.|
+|**Supprimer**|Supprimer le bloc de données.|

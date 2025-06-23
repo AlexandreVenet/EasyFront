@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>SiteMap Editor</title>
+		<meta name="description" content="Tout pour faire un sitemap.xml">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/x-icon" href="/favicon.ico">
+		<link rel="stylesheet" href="/_easyfront/css/styles.css">
+	</head>
+	<body>
+		<div class="conteneur">
+			<div class="scrolleur">
+				<h1>SiteMap Editor</h1>
+				<p>Générateur de sitemap.xml</p>
+				<nav>
+					<button type="button" disabled id="ajouter">Ajouter</button>
+					<button type="button" disabled id="plier">Plier</button>
+					<button type="button" disabled id="deplier">Déplier</button>
+					<button type="button" disabled id="enregistrer">Enregistrer</button>
+					<button type="button" disabled id="fichier">Fichier</button>
+					<button type="button" disabled id="aide">Aide</button>
+				</nav>
+				<form name="formulaire"> 
+					<template id="templateBlocDonnees">
+						<div class="blocDonnees">
+							<div class="titre">
+								<h2>Titre...</h2>
+								<div>
+									<button type="button" class="btnMonter">Monter</button>
+									<button type="button" class="btnDescendre">Descendre</button>
+									<button type="button" class="btnPlierDeplier">Plier/Déplier</button>
+								</div>
+							</div>
+							<div class="blocDonneesContenu">
+								<fieldset>
+									<legend>Informations requises</legend>
+									<div class="entree">
+										<label for="titre">Titre</label>
+										<input type="text" name="titre" id="titre" placeholder="Titre...">
+									</div>
+									<div class="entree">
+										<label for="loc">Loc</label>
+										<input type="url" name="loc" id="loc" placeholder="https://...">
+									</div>
+								</fieldset>
+								<fieldset>
+									<legend>Options</legend>
+									<div class="entree">
+										<label for="lastmod">LastMod</label>
+										<button type="button" class="btnActiver">Activer</button>
+										<input type="date" name="lastmod" id="lastmod" disabled data-default="">
+									</div>
+									<div class="entree">
+										<label for="changefreq">ChangeFreq</label>
+										<button type="button" class="btnActiver">Activer</button>
+										<select name="changefreq" id="changefreq" disabled data-default="0">
+											<option value="always" selected>always</option>
+											<option value="hourly">hourly</option>
+											<option value="daily">daily</option>
+											<option value="weekly">weekly</option>
+											<option value="monthly">monthly</option>
+											<option value="yearly">yearly</option>
+											<option value="never">never</option>
+										</select>
+									</div>
+									<div class="entree">
+										<label for="priority">Priority</label>
+										<button type="button" class="btnActiver">Activer</button>
+										<input type="number" name="priority" id="priority" min="0" max="1" step="0.001" value="0,5" placeholder="0,5" disabled data-default="0,5">
+									</div>
+								</fieldset>
+								<fieldset>
+									<legend>Actions</legend>
+									<div class="entree">
+										<label>Contrôle</label>
+										<button type="button" class="btnSupprimer">Supprimer</button>
+									</div>
+								</fieldset>
+							</div>
+						</div> 
+					</template>
+				</form>
+			</div>
+		</div>
+		
+		<!-- <img src="/_easyfront/img/imgsitemap.png" alt="image"> -->
+		
+		<script type="module" src="/_easyfront/js/sitemapeditor.js"></script>
+	</body>
+</html>

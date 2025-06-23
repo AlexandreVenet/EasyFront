@@ -1,0 +1,138 @@
+:root
+{
+	--font-family: Arial, Helvetica, sans-serif;
+	--font-size: 1rem;
+	--border-radius: 0.3rem;
+	/* La valeur suivante est déterminée ensuite en js */
+	/* https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
+	--vh: 1vh;
+}
+*
+{
+	box-sizing: border-box;
+}
+html, 
+body
+{
+	margin: 0;
+	padding: 0;
+	border: none;
+	/* CSS trick : hauteur max viewport*/
+	height: 100%;
+}
+body
+{
+	background-color: black;
+	color:black;
+	font-family: var(--font-family);
+	font-size: var(--font-size);
+	line-height: 1.5rem;
+	
+}
+.conteneur
+{	
+	/* CSS trick pour la hauteur du bloc toujours 100% du parent*/
+	height: calc(var(--vh, 1vh) * 100);
+	background-color: rgb(140,140,140);
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: stretch; 
+	min-width: 425px;
+}
+.scrolleur
+{
+	background-color: darkgray;
+	padding: 1rem;
+	margin: 0 auto;
+	flex-basis: 100%;
+	max-width:800px;
+	width: 100%;
+}
+h1
+{
+	margin:0;
+	padding:0;
+}
+input, 
+button, 
+select
+{
+	font-family: var(--font-family);
+	font-size: var(--font-size);
+	padding:0.4rem;
+	border:0;
+	border-radius: var(--border-radius);
+}
+input[type="date"]:enabled, 
+button:enabled, 
+select:enabled
+{
+	cursor: pointer;
+}
+form
+{
+	margin-top:1.5rem;
+}
+.titre
+{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom:1px solid gray;
+}
+.titre div
+{
+	flex-shrink: 0;
+	flex-grow: 0;
+}
+.blocDonneesContenu
+{
+	margin-top: 1rem;
+}
+.blocDonneesContenu.masquerBloc
+{
+	display:none;
+}
+fieldset
+{
+	margin-bottom:1rem;
+}
+fieldset legend
+{
+	font-weight: bold;
+}
+.entree
+{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: left;
+	flex-wrap: nowrap;
+	margin-bottom:0.3rem;
+}
+.entree label
+{
+	flex-basis: 7rem;
+	flex-shrink: 0;
+}
+.entree input[type="text"],
+.entree input[type="url"]
+{
+	flex-grow: 1;
+}
+.entree button
+{
+	margin-right:0.3rem;
+}
+.erreur
+{
+	background-color: rgb(255, 240, 240);
+	box-shadow:inset 0px 0px 0px 2px rgb(255, 0, 0);
+}
+.succes
+{
+	background-color: rgb(240, 255, 240);
+	box-shadow:inset 0px 0px 0px 2px rgb(0, 255, 0);
+}

@@ -27,11 +27,13 @@ else
 	refereur = process.env.DISTANT_HOST;
 }
 
-const fichiersHTML = path.join(__dirname, 'html');
+const fichiersHTML = path.join(__dirname, 'pagesHtml');
 const fichiersFront = path.join(__dirname, '../front');
 
-const fichiersModeles = path.join(__dirname, 'modeles');
+const fichiersModeles = path.join(__dirname, 'modelesHtml');
 const cheminModele = path.join(fichiersModeles, 'modele.html');
+
+const nomPageErreur = '_erreur.html';
 
 const types_MIME = 
 {
@@ -40,7 +42,7 @@ const types_MIME =
 	'.htm': 'text/html',
 	'.js': 'text/javascript',
 	'.css': 'text/css',
-
+	
 	'.png': 'image/png',
 	'.jpg': 'image/jpeg',
 	'.jpeg': 'image/jpeg',
@@ -57,6 +59,8 @@ const types_MIME =
 	
 	'.pdf': 'application/pdf',
 	
+	'.xml': 'application/xml',
+	
 	'.zip': 'application/zip'
 };
 
@@ -71,6 +75,8 @@ const encodages = [
 ];
 
 const fichiersNonCompressables = ['.zip', '.rar', '.mp3', '.mp4', '.jpg', '.png', '.pdf', '.ico'];
+
+const repertoireEasyFront = '/_easyfront';
 
 
 
@@ -97,6 +103,18 @@ const server = http.createServer(async (req, res) =>
 	{
 		cheminRessource = path.join(fichiersHTML, 'index.html');
 	}
+	else if(req.url === '/_erreur') // Quoi ? On demande l'erreur ? 😄
+	{
+		// v.1
+		// redirigerEnAccueil(res);
+		// return;
+		// v.2
+		cheminRessource = path.join(fichiersHTML, 'dans-l-espaaace.html'); // 🐷
+	}
+	else if(req.url === '/sitemap.xml')
+	{
+		cheminRessource = path.join(__dirname, '../sitemap.xml');
+	}
 	else if (req.url.match(/\.(html?|js|css|png|jpe?g|gif|svg|ico|eot|woff2?|otf|ttf|ttc|txt|pdf|zip)$/)) 
 	{
 		// Cache control
@@ -105,6 +123,10 @@ const server = http.createServer(async (req, res) =>
 		if(req.url === '/favicon.ico')
 		{
 			cheminRessource = path.join(__dirname, '../favicon.ico');
+		}
+		else if(req.url.startsWith(repertoireEasyFront) && refereur !== process.env.LOCAL_HOST) 
+		{
+			cheminRessource = path.join(fichiersHTML, nomPageErreur);
 		}
 		else
 		{
@@ -124,15 +146,31 @@ const server = http.createServer(async (req, res) =>
 	else
 	{
 		let urlPropre = nettoyerURL(req.url);
-		if(urlPropre === '/erreur') // Quoi ? On demande l'erreur ? 😄
+		
+		if(urlPropre.startsWith(repertoireEasyFront))
 		{
-			// v.1
-			// redirigerEnAccueil(res);
-			// return;
-			// v.2
-			urlPropre = '/dans-l-espâââce'; // 🐷
+			if(refereur !== process.env.LOCAL_HOST)
+			{	
+				urlPropre = nomPageErreur; 
+			}
+			else
+			{
+				const sitemapEditor = require('./_easyfront/sitemapEditor');
+				await sitemapEditor.creerFichier(fichiersHTML, process.env.DISTANT_HOST);
+				if(urlPropre === '/_easyfront/lire')
+				{
+					sitemapEditor.route_lire(res); 
+					return;
+				}
+				else if(urlPropre === '/_easyfront/enregistrer' && req.method === 'POST')
+				{
+					sitemapEditor.route_enregistrer(req, res);
+					return;
+				}
+			}
 		}
-		cheminRessource = path.join(fichiersHTML, urlPropre + '.html');
+		
+		cheminRessource = path.join(fichiersHTML, urlPropre + '.html');	
 	}
 		
 	// L'extension de fichier
@@ -232,7 +270,7 @@ const server = http.createServer(async (req, res) =>
 	
 	// Gérer un modèle HTML pour les pages ainsi que les sous-éléments HTML éventuels
 	let donneesFinales = fichierLu.donnees;
-	if(cheminRessource.endsWith('.html'))
+	if(cheminRessource.endsWith('.html') && !req.url.startsWith(repertoireEasyFront))
 	{
 		let donneesUtf8 = fichierLu.donnees.toString('utf8');
 		donneesUtf8 = await inclureSources(donneesUtf8);
@@ -342,9 +380,9 @@ let retournerMessage = (res, statusCode, message) =>
 
 let renvoyerPageErreur = (res, cheminDemande) =>
 {
-	const cheminErreur = path.join(fichiersHTML, 'erreur.html');
+	const cheminErreur = path.join(fichiersHTML, nomPageErreur);
 	
-	// Préciser l'encodage
+	// Préciser l'encodage pour éditer
 	fs.readFile(cheminErreur, 'utf-8', (err404, contenuErreur) => 
 	{
 		// Si le fichier d'erreur lui-même est introuvable

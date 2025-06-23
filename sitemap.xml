@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset 
+	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	xmlns:perso="http://easyfront/perso">
+	<url>
+		<perso:titre>https://...</perso:titre>
+		<loc>https://...</loc>
+	</url>
+	<url>
+		<perso:titre>/querystring</perso:titre>
+		<loc>https://.../querystring</loc>
+	</url>
+	<url>
+		<perso:titre>/test-modele</perso:titre>
+		<loc>https://.../test-modele</loc>
+	</url>
+	<url>
+		<perso:titre>/toto/zero</perso:titre>
+		<loc>https://.../toto/zero</loc>
+	</url>
+</urlset>
