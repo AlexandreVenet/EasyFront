@@ -6,6 +6,7 @@ const url = require('url');
 const process = require('process');
 const zlib = require('zlib');
 
+
 // Ajouter mes variables d'environnement à celles éventuellement déjà déclarées.
 // En effet, l'hébergeur peut utiliser process.env pour stocker des infos du serveur.
 const env = require('./env');
@@ -16,9 +17,12 @@ env.chargerENVLocal();
 const SERVEUR = process.env.HOST || process.env.LOCAL_HOST;
 const PORT = process.env.PORT || process.env.LOCAL_PORT;
 
+// On est en en environnement de dev ou pas ?
+let estEnDev = SERVEUR === process.env.LOCAL_HOST;
+
 // Le referer du serveur
 let refereur; 
-if(SERVEUR === process.env.LOCAL_HOST)
+if(estEnDev)
 {
 	refereur = SERVEUR;
 }
@@ -26,6 +30,7 @@ else
 {
 	refereur = process.env.DISTANT_HOST;
 }
+
 
 const fichiersHTML = path.join(__dirname, 'pagesHtml');
 const fichiersFront = path.join(__dirname, '../front');
@@ -86,7 +91,7 @@ const server = http.createServer(async (req, res) =>
 	tracerInformations(req);
 		
 	definirEntetesSecurite(res);
-	
+		
 	// Récupérer la liste des encodages supportés
 	
 	const acceptEncoding = req.headers['accept-encoding'] || '';
@@ -124,7 +129,7 @@ const server = http.createServer(async (req, res) =>
 		{
 			cheminRessource = path.join(__dirname, '../favicon.ico');
 		}
-		else if(req.url.startsWith(repertoireEasyFront) && refereur !== process.env.LOCAL_HOST) 
+		else if(req.url.startsWith(repertoireEasyFront) && !estEnDev) 
 		{
 			cheminRessource = path.join(fichiersHTML, nomPageErreur);
 		}
@@ -149,7 +154,7 @@ const server = http.createServer(async (req, res) =>
 		
 		if(urlPropre.startsWith(repertoireEasyFront))
 		{
-			if(refereur !== process.env.LOCAL_HOST)
+			if(!estEnDev)
 			{	
 				urlPropre = nomPageErreur; 
 			}
@@ -419,15 +424,33 @@ let tracerInformations = (req) =>
 	Adresse IP : ${req.socket.remoteAddress}
 	Adresse IP si Proxy : ${req.headers['x-forwarded-for']}
 	User agent: ${req.headers['user-agent']}
-	acceptEncoding = ${req.headers['accept-encoding']}`); 
+	acceptEncoding : ${req.headers['accept-encoding']}
+	x-forwarded-proto : ${req.headers['x-forwarded-proto'] || 'non présent'}`); 
 	// socket = connexion TCP, remoteAddress = adresse IP de l'utilisateur ayant fait la requête
 	// Adresse IPv4, par exemple 192.168.0.1
 	// Adresse IPv6, par exemple ::1 (localhost en IPv6).
+	
 	console.log('');
 }
 
 let definirEntetesSecurite = (res) =>
 {
+	// HSTS
+	/*
+	On ajoute cet en-tête en testant par exemple req.headers['x-forwarded-proto'] (donc, il faut passer req en paramètre de cette fonction). Ce qui donnerait :
+		const forwardedProto = req.headers['x-forwarded-proto'];
+		if(forwardedProto === 'https')
+		{
+			res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains') // 2 ans
+		}
+	Or, cela dépend du serveur. En effet, celui-ci peut ne pas ajouter cet en-tête ou encore renvoyer un tableau...
+	Donc, autre méthode possible : déclarer qu'on est en dev (ou en prod) et tester le cas.
+	*/
+	if(!estEnDev)
+	{
+		res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains') // 2 ans
+	}
+	
 	// CSP 
 	res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'self'; connect-src 'self'; frame-ancestors 'none'; child-src 'self';");
 	
