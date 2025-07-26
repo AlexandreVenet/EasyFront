@@ -17,7 +17,7 @@ env.chargerENVLocal();
 const SERVEUR = process.env.HOST || process.env.LOCAL_HOST;
 const PORT = process.env.PORT || process.env.LOCAL_PORT;
 
-// On est en en environnement de dev ou pas ?
+// On est en environnement de dev ou pas ?
 let estEnDev = SERVEUR === process.env.LOCAL_HOST;
 
 // Le referer du serveur
@@ -278,7 +278,7 @@ const server = http.createServer(async (req, res) =>
 	if(cheminRessource.endsWith('.html') && !req.url.startsWith(repertoireEasyFront))
 	{
 		let donneesUtf8 = fichierLu.donnees.toString('utf8');
-		donneesUtf8 = await inclureSources(donneesUtf8);
+		// donneesUtf8 = await inclureSources(donneesUtf8); // n'inclut que pour la page
 		
 		const valeurTitle = extraireContenu(/<title>([^<]*)<\/title>/i, donneesUtf8);
 		const valeurDescription = extraireContenu(/<description>([^<]*)<\/description>/i, donneesUtf8);
@@ -308,6 +308,9 @@ const server = http.createServer(async (req, res) =>
 			.replace('{{customTags}}', customTags)
 			.replace('{{page}}', contenuPage)
 		;
+		
+		page = await inclureSources(page); // inclut pour tout le doc HTML à retourner
+		
 		donneesFinales = page;
 	}
 	

@@ -2,7 +2,7 @@ class App
 {
 	constructor()
 	{
-		this.nomConteneur = 'conteneur';
+		this.nomConteneur = 'conteneurPage';
 		this.conteneur =  this.chercherConteneur(document);
 		this.metaDescription = this.chercherMetaDescription(document); 
 		this.headCustomTag = 'customTag';

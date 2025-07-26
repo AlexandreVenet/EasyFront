@@ -83,7 +83,7 @@ Exemple d'imbrication en profondeur : le modèle principal, la page, une nav, de
 		{{customTags}}
 	</head>
 	<body>
-		{{body}}
+		{{page}}
 	</body>
 </html>
 ```
