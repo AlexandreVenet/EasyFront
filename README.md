@@ -16,7 +16,7 @@ Des fichiers sont soit à télécharger soit à consulter en ligne. L'attribut `
 
 ## Modèle et pages
 
-Utilisation d'un modèle HTML posant une structure unique pour toutes les pages HTML du site. Les léments suivants sont modifiables : `base`, `title`, `description`, `body`. Le `head` peut accueillir des balises supplémentaires grâce à une balise personnalisée `customTags` (si rien à ajouter, l'omettre).
+Utilisation d'un modèle HTML posant une structure unique pour toutes les pages HTML du site. Les éléments suivants sont modifiables : `base`, `title`, `description`, `page`. Le `head` peut accueillir des balises supplémentaires grâce à une balise personnalisée `customTags` (si rien à ajouter, l'omettre).
 
 Exemple de modèle :
 
@@ -34,7 +34,7 @@ Exemple de modèle :
 		{{customTags}}
 	</head>
 	<body>
-		{{body}}
+		{{page}}
 	</body>
 </html>
 ```
@@ -57,15 +57,11 @@ Exemple de page avec un style spécifique :
 
 Attention, la page d'erreur, quant à elle, n'est pas associée au modèle. Mais son *tag* `<base>` peut être modifié comme celui du modèle.
 
-Pourquoi `class="customTag"` ? Ce n'est pas utile pour ce qui nous occupe ici. Cette classe a une importance si le *front-end* est en AJAX (voir partie idoine).
+Pourquoi `class="customTag"` dans l'exemple précédent ? Ce n'est pas utile pour ce qui nous occupe ici. Cette classe a une importance si le *front-end* est en AJAX (voir partie idoine).
 
 ## Sous-éléments
 
-Une page HTML est construite dynamiquement. Elle peut appeler des fichiers contenant des éléments HTML à insérer. Avec le modèle principal, on obtient donc de ce schéma d'imbrication :
-
-```
-Modèle > Page > Contenus imbriquables
-```
+Une page HTML est construite dynamiquement. Elle peut appeler des fichiers contenant des éléments HTML à insérer.
 
 Exemple d'imbrication en profondeur : le modèle principal, la page, une nav, des liens.
 
@@ -128,7 +124,7 @@ La première consiste à ce que toutes pages HTML présentent le *tag* `<base>` 
 <base href="http://localhost:3000"> 
 ```
 
-La seconde consiste à utiliser des liens relatifs commençant tous par `/`. 
+La seconde consiste à utiliser des liens relatifs commençant tous par `/`, ciblant ainsi la racine.
 
 ```HTML
 <link rel="stylesheet" href="/css/styles.css">
@@ -145,6 +141,8 @@ La seconde consiste à utiliser des liens relatifs commençant tous par `/`.
 - la mise à jour du DOM, du `title`, de la `description`, du contenu de page.
 
 Parlons de `class=customTag` dans un `<link>` situé en `<head>`. Cette classe `customTag` n'existe pas dans les styles CSS. C'est simplement un sélecteur pour le programme *front-end*, sélecteur qui permet d'identifier les `<link>` spécifiques d'une page HTML. Ces balises sont ajoutées et supprimées automatiquement au chargement de page.
+
+`main.js` est aussi utilisé sur la page d'erreur. Ainsi, les transitions entre écrans sont prises en charge aussi depuis cette page.
 
 ## Scripts JS des pages
 

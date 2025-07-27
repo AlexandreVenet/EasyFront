@@ -5,7 +5,7 @@ class App
 		this.nomConteneur = 'conteneurPage';
 		this.conteneur =  this.chercherConteneur(document);
 		this.metaDescription = this.chercherMetaDescription(document); 
-		this.headCustomTag = 'customTag';
+		// this.headCustomTag = 'customTag';
 		this.pageDemandee;
 		this.dureeTransition;
 
@@ -28,7 +28,7 @@ class App
 				e.preventDefault();
 				const href = a.getAttribute('href'); // contenu de l'attribut
 				const url = e.target.href; // l'adresse absolue
-				if(href?.startsWith('/telechargement'))
+				if(href?.startsWith('/telechargements'))
 				{
 					this.telechargerFichier(url);
 				}
@@ -45,15 +45,9 @@ class App
 		}
 	}
 	
-	chercherConteneur = (element) =>
-	{
-		return element.querySelector('#' + this.nomConteneur);
-	}
-	
-	chercherMetaDescription = (element) =>
-	{
-		return element.querySelector('meta[name="description"]'); 
-	}
+	chercherConteneur = (element) => element.querySelector('#' + this.nomConteneur);
+		
+	chercherMetaDescription = (element) => element.querySelector('meta[name="description"]'); 
 	
 	pageTransition = async () =>
 	{		
@@ -148,15 +142,15 @@ class App
 		
 		this.metaDescription.content = this.chercherMetaDescription(doc).content;
 		
-		document.head.querySelectorAll('link.' + this.headCustomTag).forEach(link => link.remove());
-		const links = doc.querySelectorAll('link[rel="stylesheet"].' + this.headCustomTag);
+		document.head.querySelectorAll('link.customTag').forEach(link => link.remove());
+		const links = doc.querySelectorAll('link[rel="stylesheet"].customTag');
 		for (const link of links) 
 		{
 			const href = link.href;
 			const newLink = document.createElement('link');
 			newLink.rel = 'stylesheet';
 			newLink.href = href;
-			newLink.setAttribute('class', this.headCustomTag);
+			newLink.setAttribute('class', 'customTag');
 			document.head.appendChild(newLink);
 		}
 		
@@ -167,20 +161,11 @@ class App
 		}
 	}
 	
-	finiParUneExtension = (href) =>
-	{
-		return /\.\w{2,5}?$/.test(href);
-	}
+	finiParUneExtension = (href) => /\.\w{2,5}?$/.test(href); 
 	
-	transitionPageMasquer = () =>
-	{
-		document.body.classList.add('masquer');
-	}
+	transitionPageMasquer = () => document.body.classList.add('masquer'); 
 	
-	transitionPageAfficher = () =>
-	{
-		document.body.classList.remove('masquer');
-	}
+	transitionPageAfficher = () => document.body.classList.remove('masquer'); 
 	
 	obtenirDureeTransition = () =>
 	{
@@ -200,10 +185,10 @@ class App
 		}
 	}
 	
-	ajouterElementAuConteneur = (element) =>
-	{
-		this.conteneur.appendChild(element);
-	}
+	// ajouterElementAuConteneur = (element) => 
+	// {
+	// 	this.conteneur.appendChild(element);
+	// }
 		
 	ecouterHistorique = () =>
 	{
@@ -232,7 +217,7 @@ class App
 	enregistrerPremierEtatHistorique = () =>
 	{
 		const windowLocationHref = window.location.href;
-		let stateData = this.definirStateData(windowLocationHref);
+		const stateData = this.definirStateData(windowLocationHref);
 		window.history.replaceState(stateData, '', windowLocationHref);
 	}
 	
@@ -267,10 +252,7 @@ class App
 		;
 	}
 	
-	ouvrirNouvelOnglet = (chemin) =>
-	{
-		window.open(chemin, '_blank');
-	}
+	ouvrirNouvelOnglet = (chemin) => window.open(chemin, '_blank'); 
 	
 	gererJSPages = async () =>
 	{

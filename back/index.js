@@ -79,7 +79,7 @@ const encodages = [
 	{ nom: 'deflate', methodeRessource: zlib.deflate, methodeTelechargement: zlib.createDeflate }
 ];
 
-const fichiersNonCompressables = ['.zip', '.rar', '.mp3', '.mp4', '.jpg', '.png', '.pdf', '.ico'];
+const fichiersNonCompressables = ['.zip', '.rar', '.mp3', '.mp4', '.jpg', '.png', '.pdf', '.ico', '.woff2'];
 
 const repertoireEasyFront = '/_easyfront';
 
@@ -137,7 +137,7 @@ const server = http.createServer(async (req, res) =>
 		{
 			cheminRessource = path.join(fichiersFront, req.url);
 			
-			if(req.url.startsWith('/telechargement'))
+			if(req.url.startsWith('/telechargements'))
 			{
 				fichierEstATelecharger = true;
 				// Conserver le nom du fichier
