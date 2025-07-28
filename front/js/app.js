@@ -110,7 +110,7 @@ class App
 				return doc;
 		});*/
 		
-		return await fetch(this.pageDemandee)
+		/*return await fetch(this.pageDemandee)
 			.then(async reponse => 
 			{
 				if(!reponse.ok)	
@@ -133,7 +133,29 @@ class App
 				{
 					log(`💢 app.js > chargerPage() > Message d'erreur : ${erreur.message}`, this.coul);
 				}
-		});
+		});*/
+		
+		try 
+		{
+			const reponse = await fetch(this.pageDemandee);
+			const texte = await reponse.text();
+			if(!reponse.ok)	
+			{
+				throw new HttpError(reponse.status, texte);
+			}
+			return this.parserTexteEnHTML(texte);			
+		} 
+		catch (erreur) 
+		{
+			if(erreur instanceof HttpError)
+			{
+				return this.parserTexteEnHTML(erreur.message);
+			}
+			else
+			{
+				log(`💢 main.js > App > chargerPage() > Erreur : ${erreur.message}`, this.coul);
+			}
+		}
 	}
 	
 	modifierDOM = (doc) =>
@@ -228,9 +250,9 @@ class App
 		return doc;
 	}
 	
-	telechargerFichier = (chemin) =>
+	telechargerFichier = async (chemin) =>
 	{
-		fetch(chemin, {method:'HEAD'})
+		/*fetch(chemin, {method:'HEAD'})
 			.then(response => 
 			{
 				if (response.ok) 
@@ -249,7 +271,29 @@ class App
 			{
 				log(`💢 app.js > telechargerFichier() > ${error}`, this.coul);
 			})
-		;
+		;*/
+		try 
+		{
+			const reponse = await fetch(chemin, {method: 'HEAD'});
+		
+			if (reponse.ok) 
+			{
+				const lien = document.createElement('a');
+				lien.href = chemin;
+				// lien.download = ''; // non 😄
+				document.body.appendChild(lien);
+				lien.click();
+				document.body.removeChild(lien);
+			}
+			// else 
+			// {
+			// 	log(`💢 main.js > App > telechargerFichier() > Fichier introuvable à ${chemin}`, this.coul);
+			// }
+		} 
+		catch (error) 
+		{
+			log(`💢 main.js > App > telechargerFichier() > ${error}`, this.coul);
+		}
 	}
 	
 	ouvrirNouvelOnglet = (chemin) => window.open(chemin, '_blank'); 
