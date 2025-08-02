@@ -116,18 +116,16 @@ const server = http.createServer(async (req, res) =>
 		// v.2
 		cheminRessource = path.join(fichiersHTML, 'dans-l-espaaace.html'); // 🐷
 	}
-	else if(req.url === '/sitemap.xml')
-	{
-		cheminRessource = path.join(__dirname, '../sitemap.xml');
-	}
 	else if (req.url.match(/\.(html?|js|css|png|jpe?g|gif|svg|ico|eot|woff2?|otf|ttf|ttc|txt|pdf|zip)$/)) 
 	{
 		// Cache control
 		// res.setHeader('Cache-Control', 'max-age=31536000, public, immutable');
 		
-		if(req.url === '/favicon.ico')
+		if(req.url === '/favicon.ico' 
+			|| req.url === '/sitemap.xml' 
+			|| req.url === '/robots.txt')
 		{
-			cheminRessource = path.join(__dirname, '../favicon.ico');
+			cheminRessource = path.join(__dirname, '..' + req.url);
 		}
 		else if(req.url.startsWith(repertoireEasyFront) && !estEnDev) 
 		{

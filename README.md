@@ -215,3 +215,7 @@ Si le fichier n'existe pas, alors il est généré automatiquement. Lors de cett
 |**Descendre**|Déplacer le bloc vers le bas.|
 |**Plier/Déplier**|Ouvrir ou fermer le bloc.|
 |**Supprimer**|Supprimer le bloc de données.|
+
+## Robots.txt
+
+Le *back-end* peut accueillir un fichier `robots.txt` à la racine.
