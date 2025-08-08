@@ -125,7 +125,7 @@ const server = http.createServer(async (req, res) =>
 		// Cache control
 		// res.setHeader('Cache-Control', 'max-age=31536000, public, immutable');
 		
-		if(req.url === '/favicon.ico')
+		if(req.url === '/favicon.ico' || req.url === '/apple-touch-icon.png')
 		{
 			cheminRessource = path.join(__dirname, '..' + req.url);
 		}
