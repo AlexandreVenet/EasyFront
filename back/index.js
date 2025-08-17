@@ -116,7 +116,7 @@ const server = http.createServer(async (req, res) =>
 		// v.2
 		cheminRessource = path.join(fichiersHTML, 'dans-l-espaaace.html'); // 🐷
 	}
-	else if(req.url === '/sitemap.xml' || req.url === '/robots.txt')
+	else if(/^\/sitemap[A-Za-z0-9_-]+\.xml$/.test(req.url) || req.url === '/robots.txt')
 	{
 		cheminRessource = path.join(__dirname, '..' + req.url);
 	}
