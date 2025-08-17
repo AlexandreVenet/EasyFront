@@ -4,7 +4,7 @@ But
 - Serveur web en Node.js
 - Fournir des pages HTML composées dynamiquement (modèle, pages de contenu, imbrication d'éléments HTML distribués en fichiers) de façon à favoriser le SEO et faciliter l'édition
 - Expérience de navigation orientée *front-end* : page spécifique affichée directement (le serveur renvoie du HTML et des ressources) ***puis*** gestion en AJAX avec transitions entre écrans et contrôle de l'historique client
-- Gestion d'un `sitemap.xml` général
+- Gestion de fichiers XML *sitemaps* 
 
 ## Généralités
 
@@ -180,7 +180,7 @@ Lorsque le serveur n'est pas *localhost*, `index.js` exclut l'accès aux ressour
 
 Par souci de sécurité, on peut supprimer les dossiers commençant par `/_easyfront` et les lignes de code correspondantes dans `index.js`.
 
-## Sitemap.xml
+## Sitemaps
 
 En *localhost*, la route `/_easyfront/sitemap-editor` achemine à un éditeur de `sitemap.xml`. Ce fichier XML est généré à la racine du projet. 
 
@@ -215,6 +215,8 @@ Si le fichier n'existe pas, alors il est généré automatiquement. Lors de cett
 |**Descendre**|Déplacer le bloc vers le bas.|
 |**Plier/Déplier**|Ouvrir ou fermer le bloc.|
 |**Supprimer**|Supprimer le bloc de données.|
+
+Si SiteMapEditor crée un fichier sitemap.xml à la racine, il reste que ce fichier peut être renommé de façon à gérer plusieurs *sitemaps*. La règle de nommage doit respecter cette expression régulière : `^\/sitemap[A-Za-z0-9_-]+\.xml$`
 
 ## Robots.txt
 
